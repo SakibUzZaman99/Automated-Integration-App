@@ -1,5 +1,3 @@
-
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,30 +6,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="24dp">
 
         <!-- App Logo -->
         <ImageView
             android:id="@+id/logo"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="@string/app_logo"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@string/app_logo"
+            android:src="@drawable/ic_launcher_foreground" />
 
         <!-- Welcome Text -->
         <TextView
             android:id="@+id/welcome_text"
-            android:text="@string/welcome_message"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/purple_700"
-            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="32dp"
+            android:gravity="center"
+            android:text="@string/welcome_message"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <!-- Google Sign-In Button -->
         <com.google.android.gms.common.SignInButton
@@ -39,13 +37,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="gone" />
+
+
         <!-- Loading Spinner (hidden by default) -->
         <ProgressBar
             android:id="@+id/loading_spinner"
-            android:visibility="gone"
-            android:layout_marginTop="24dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
