@@ -1,37 +1,92 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/custom_background"
-    android:padding="24dp">
+    android:background="@drawable/black_white_gradient_bg"
+    android:padding="20dp">
 
-    <EditText
-        android:id="@+id/inputText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your prompt"
-        android:inputType="textMultiLine"
-        android:maxLines="6"
-        android:minLines="3" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/runButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/custom_button_color"
-        android:text="Run LLM" />
+        <!-- Login Info -->
+        <TextView
+            android:id="@+id/loginStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Not logged in"
+            android:textColor="#222222"
+            android:textStyle="bold"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/outputText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/custom_text"
-        android:text="Response will appear here"
-        android:textSize="16sp" />
+        <!-- Text Input for LLM -->
+        <EditText
+            android:id="@+id/textInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#EEEEEE"
+            android:hint="\uD83D\uDCDD Enter your text prompt here"
+            android:padding="16dp"
+            android:textColorHint="#666666"
+            android:textColor="#111111"
+            android:textSize="16sp" />
 
-</LinearLayout>
+        <!-- Image Picker Button -->
+        <Button
+            android:id="@+id/selectImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="\uD83D\uDCC1 Select Image"
+            android:backgroundTint="#444444"
+            android:textColor="#FFFFFF" />
 
+        <!-- Run LLM Button -->
+        <Button
+            android:id="@+id/runLLM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="\uD83E\uDDE0 Run Instruction LLM"
+            android:backgroundTint="#111111"
+            android:textColor="#FFFFFF" />
 
+        <!-- Run Multimodal Button -->
+        <Button
+            android:id="@+id/runMultimodal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="\uD83D\uDDBC\uFE0F Run Multimodal Model"
+            android:backgroundTint="#888888"
+            android:textColor="#FFFFFF" />
+
+        <!-- Output Text -->
+        <TextView
+            android:id="@+id/outputView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="#FAFAFA"
+            android:gravity="start"
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            android:text="Output will appear here"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+        <!-- Logout Button -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_marginTop="18dp"
+            android:backgroundTint="#222222"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>
