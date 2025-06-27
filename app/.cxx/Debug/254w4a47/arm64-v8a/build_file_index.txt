@@ -1,0 +1,1 @@
+C:\Users\sakib\AndroidStudioProjects\LocalLLMApp\app\src\main\cpp\CMakeLists.txt

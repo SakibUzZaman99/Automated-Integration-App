@@ -1,0 +1,10 @@
+
+<resources>
+    <string name="app_name">LocalLLMApp</string>
+    <string name="default_web_client_id">232061410702-t2uo85dnquit4974tmb1f8r827kr96gu.apps.googleusercontent.com</string>
+
+    <string name="app_logo">App logo</string>
+    <string name="welcome_message">Welcome to LocalLLM!</string>
+
+
+</resources>

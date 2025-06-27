@@ -1,0 +1,3 @@
+C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/.cxx/Debug/254w4a47/x86_64/CMakeFiles/AndroidApp.dir
+C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/.cxx/Debug/254w4a47/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/.cxx/Debug/254w4a47/x86_64/CMakeFiles/rebuild_cache.dir
