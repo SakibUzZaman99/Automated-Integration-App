@@ -1,0 +1,29 @@
+{
+  "buildFiles": [
+    "C:\\Users\\sakib\\AndroidStudioProjects\\AndroidApp\\app\\src\\main\\cpp\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\sakib\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\sakib\\AndroidStudioProjects\\AndroidApp\\app\\.cxx\\RelWithDebInfo\\g303o542\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\sakib\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\sakib\\AndroidStudioProjects\\AndroidApp\\app\\.cxx\\RelWithDebInfo\\g303o542\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "localllmapp::@6890427a1f51a3e7e1df": {
+      "artifactName": "localllmapp",
+      "abi": "x86",
+      "output": "C:\\Users\\sakib\\AndroidStudioProjects\\AndroidApp\\app\\build\\intermediates\\cxx\\RelWithDebInfo\\g303o542\\obj\\x86\\liblocalllmapp.so",
+      "runtimeFiles": [
+        "C:\\Users\\sakib\\AndroidStudioProjects\\llama.cpp\\build-android\\bin\\libllama.so"
+      ]
+    }
+  }
+}

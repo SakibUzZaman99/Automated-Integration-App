@@ -1,0 +1,3 @@
+C:/Users/sakib/AndroidStudioProjects/AndroidApp/app/.cxx/Debug/254w4a47/arm64-v8a/CMakeFiles/AndroidApp.dir
+C:/Users/sakib/AndroidStudioProjects/AndroidApp/app/.cxx/Debug/254w4a47/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/sakib/AndroidStudioProjects/AndroidApp/app/.cxx/Debug/254w4a47/arm64-v8a/CMakeFiles/rebuild_cache.dir
