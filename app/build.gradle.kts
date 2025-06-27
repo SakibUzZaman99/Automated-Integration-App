@@ -29,6 +29,16 @@ android {
             )
         }
     }
+
+    externalNativeBuild {
+        cmake {
+            // Specifies the path to your CMakeLists.txt file.
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "4.0.2" // Use the version of CMake you installed (check SDK Tools)
+        }
+    }
+
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
