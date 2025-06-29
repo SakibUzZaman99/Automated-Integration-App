@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     private var imageBytes: ByteArray? = null
 
     // Model paths - these should be placed in your app/src/main/assets folder
-    private val TEXT_MODEL_PATH = "c:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/src/main/assets/Qwen3-0.6B-UD-Q5_K_XL.gguf"
+    private val TEXT_MODEL_PATH = "d:/GitDesk/Automated-Integration-App/app/src/main/assets/Qwen3-0.6B-UD-Q5_K_XL.gguf/"
     private val MULTIMODAL_MODEL_PATH = "app/src/main/assets/gemma-3-4b-it-Q4_1.gguf" // Update with your actual Gemma 3 model filename
 
     @SuppressLint("SetTextI18n")
