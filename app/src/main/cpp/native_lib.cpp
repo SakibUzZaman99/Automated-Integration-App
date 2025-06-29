@@ -14,7 +14,7 @@
 // Java_com_yourpackage_yourapp_YourClass_yourMethodName
 // (Replace com_yourpackage_yourapp_YourClass with your actual package and class name)
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_llmapp_MainActivity_stringFromJNI(
+Java_com_example_localllmapp_MainActivity_stringFromJNI(
 JNIEnv* env, // Pointer to the JNI environment, used to interact with Java
 jobject /* this */) { // Reference to the Java object that called this method
 
