@@ -15,8 +15,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        init {
+            System.loadLibrary("omp")         // << Must be first
+            System.loadLibrary("ggml-cpu")
+            System.loadLibrary("llama")         // Prebuilt llama.so
+            System.loadLibrary("LocalLLMApp")   // Your JNI wrapper
+        }
+    }
+
+    external fun runTextOnlyLlama(prompt: String, modelPath: String): String
+    external fun runMultimodalLlama(imageData: ByteArray, prompt: String, modelPath: String): String
 
     private lateinit var outputView: TextView
     private lateinit var textInput: EditText
@@ -25,20 +42,9 @@ class MainActivity : AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 1
     private var imageBytes: ByteArray? = null
 
-    // This companion object block is equivalent to a static block in Java.
-    // It's used to load the native library when the MainActivity class is first loaded.
-    companion object {
-        // Used to load the 'my_native_lib' library on application startup.
-        // The name here MUST match the name defined in CMakeLists.txt (add_library)
-        init {
-            System.loadLibrary("my_native_lib")
-        }
-    }
-
-    // Declare the native method using the 'external' keyword.
-    // The method name 'stringFromJNI' corresponds to the C++ function name suffix.
-    external fun stringFromJNI(): String
-
+    // Model paths - these should be placed in your app/src/main/assets folder
+    private val TEXT_MODEL_PATH = "c:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/src/main/assets/Qwen3-0.6B-UD-Q5_K_XL.gguf"
+    private val MULTIMODAL_MODEL_PATH = "app/src/main/assets/gemma-3-4b-it-Q4_1.gguf" // Update with your actual Gemma 3 model filename
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +55,6 @@ class MainActivity : AppCompatActivity() {
         textInput = findViewById(R.id.textInput)
         outputView = findViewById(R.id.outputView)
         loginStatus = findViewById(R.id.loginStatus)
-
-        outputView.text = "JNI Status: " + stringFromJNI() + "\n"
 
         // Google Sign-In client config
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -83,12 +87,17 @@ class MainActivity : AppCompatActivity() {
         // Button Actions
         findViewById<Button>(R.id.runLLM).setOnClickListener {
             val input = textInput.text.toString()
-            outputView.text = mockRunLLM(input)
+            if (input.isNotEmpty()) {
+                runTextLLM(input)
+            } else {
+                outputView.text = "Please enter some text."
+            }
         }
 
         findViewById<Button>(R.id.runMultimodal).setOnClickListener {
             if (imageBytes != null) {
-                outputView.text = mockRunMultimodal(imageBytes!!)
+                val prompt = textInput.text.toString()
+                runMultimodalLLM(imageBytes!!, prompt)
             } else {
                 outputView.text = "Please select an image first."
             }
@@ -113,11 +122,58 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun mockRunLLM(input: String): String {
-        return "🤖 [Mock LLM Output]: $input"
+    private fun runTextLLM(input: String) {
+        // Show loading state
+        outputView.text = "Processing..."
+
+        // Run in background thread
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val modelPath = getModelPath("Qwen3-0.6B-UD-Q5_K_XL.gguf")
+                val result = runTextOnlyLlama(input, modelPath)
+
+                // Update UI on main thread
+                withContext(Dispatchers.Main) {
+                    outputView.text = result
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    outputView.text = "Error: ${e.message}"
+                }
+            }
+        }
     }
 
-    private fun mockRunMultimodal(image: ByteArray): String {
-        return "🖼️ [Mock Multimodal Output]: Processed image (${image.size} bytes)"
+    private fun runMultimodalLLM(image: ByteArray, prompt: String) {
+        // Show loading state
+        outputView.text = "Processing image and text..."
+
+        // Run in background thread
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val result = runMultimodalLlama(image, prompt, MULTIMODAL_MODEL_PATH)
+
+                // Update UI on main thread
+                withContext(Dispatchers.Main) {
+                    outputView.text = result
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    outputView.text = "Error: ${e.message}"
+                }
+            }
+        }
+    }
+
+    private fun getModelPath(assetName: String): String {
+        val file = File(filesDir, assetName)
+        if (!file.exists()) {
+            assets.open(assetName).use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+        return file.absolutePath
     }
 }

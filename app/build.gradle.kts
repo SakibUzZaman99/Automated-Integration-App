@@ -18,6 +18,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags += ""
+            }
+        }
     }
 
     buildTypes {
@@ -29,16 +34,6 @@ android {
             )
         }
     }
-
-    externalNativeBuild {
-        cmake {
-            // Specifies the path to your CMakeLists.txt file.
-            path = file("src/main/cpp/CMakeLists.txt")
-            version = "4.0.2" // Use the version of CMake you installed (check SDK Tools)
-        }
-    }
-
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -49,6 +44,14 @@ android {
     buildFeatures {
         compose = true
     }
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
+    sourceSets["main"].jniLibs.srcDirs("src/main/jniLibs")
+
 }
 
 dependencies {
@@ -79,7 +82,6 @@ dependencies {
     implementation(libs.androidx.core.ktx.v1160)
     implementation(libs.play.services.auth)
 
-
-
-
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 }
