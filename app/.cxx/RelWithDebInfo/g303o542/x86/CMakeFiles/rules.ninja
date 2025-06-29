@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: localllmapp
+# Project: LocalLLMApp
 # Configurations: RelWithDebInfo
 # =============================================================================
 # =============================================================================
@@ -14,7 +14,7 @@
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__localllmapp_RelWithDebInfo
+rule CXX_COMPILER__LocalLLMApp_RelWithDebInfo
   depfile = $DEP_FILE
   deps = gcc
   command = C:\Users\sakib\AppData\Local\Android\Sdk\ndk\27.0.12077973\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe --target=i686-none-linux-android34 --sysroot=C:/Users/sakib/AppData/Local/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/windows-x86_64/sysroot $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -24,7 +24,7 @@ rule CXX_COMPILER__localllmapp_RelWithDebInfo
 #############################################
 # Rule for linking CXX shared library.
 
-rule CXX_SHARED_LIBRARY_LINKER__localllmapp_RelWithDebInfo
+rule CXX_SHARED_LIBRARY_LINKER__LocalLLMApp_RelWithDebInfo
   command = cmd.exe /C "$PRE_LINK && C:\Users\sakib\AppData\Local\Android\Sdk\ndk\27.0.12077973\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe --target=i686-none-linux-android34 --sysroot=C:/Users/sakib/AppData/Local/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/windows-x86_64/sysroot -fPIC $LANGUAGE_COMPILE_FLAGS $ARCH_FLAGS $LINK_FLAGS -shared $SONAME_FLAG$SONAME -o $TARGET_FILE $in $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
   description = Linking CXX shared library $TARGET_FILE
   restat = $RESTAT
@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\Users\sakib\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SC:\Users\sakib\AndroidStudioProjects\AndroidApp\app\src\main\cpp -BC:\Users\sakib\AndroidStudioProjects\AndroidApp\app\.cxx\RelWithDebInfo\g303o542\x86
+  command = C:\Users\sakib\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SC:\Users\sakib\AndroidStudioProjects\LocalLLMApp\app\src\main\cpp -BC:\Users\sakib\AndroidStudioProjects\LocalLLMApp\app\.cxx\RelWithDebInfo\g303o542\x86
   description = Re-running CMake...
   generator = 1
 

@@ -1,1 +1,1 @@
-C:\Users\sakib\AndroidStudioProjects\AndroidApp\app\src\main\cpp\CMakeLists.txt
+C:\Users\sakib\AndroidStudioProjects\LocalLLMApp\app\src\main\cpp\CMakeLists.txt

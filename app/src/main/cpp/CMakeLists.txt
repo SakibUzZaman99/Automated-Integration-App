@@ -1,32 +1,38 @@
 cmake_minimum_required(VERSION 3.22.1)
-project("LocalLLMApp")
 
-# Your JNI library
-add_library(${PROJECT_NAME} SHARED
-        native-lib.cpp
-)
+project("localllmapp")
 
-# Prebuilt llama.cpp library
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Add include directory
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Find required libraries
+find_library(log-lib log)
+
+# Add the JNI library
+add_library(LocalLLMApp SHARED
+        native-lib.cpp)
+
+# Import prebuilt libraries
+add_library(omp SHARED IMPORTED)
+set_target_properties(omp PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libomp.so)
+
+add_library(ggml-cpu SHARED IMPORTED)
+set_target_properties(ggml-cpu PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libggml-cpu.so)
+
 add_library(llama SHARED IMPORTED)
-set_target_properties(llama PROPERTIES
-        IMPORTED_LOCATION
-        "C:/Users/sakib/llama.cpp/build-android/bin/libllama.so"
-)
+set_target_properties(llama PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libllama.so)
 
-# Include llama headers
-target_include_directories(${PROJECT_NAME} PRIVATE
-        "C:/Users/sakib/llama.cpp/include"
-        "C:/Users/sakib/llama.cpp/ggml/include"
-)
-
-# Link your native code against llama
-target_link_libraries(${PROJECT_NAME}
-        llama
+# Link libraries
+target_link_libraries(LocalLLMApp
+        ${log-lib}
         android
-        log
-)
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-        CXX_STANDARD 11
-        CXX_STANDARD_REQUIRED ON
-)
+        omp
+        ggml-cpu
+        llama)

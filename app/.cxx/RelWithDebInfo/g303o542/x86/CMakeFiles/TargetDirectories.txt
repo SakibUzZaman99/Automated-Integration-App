@@ -1,3 +1,3 @@
-C:/Users/sakib/AndroidStudioProjects/AndroidApp/app/.cxx/RelWithDebInfo/g303o542/x86/CMakeFiles/localllmapp.dir
-C:/Users/sakib/AndroidStudioProjects/AndroidApp/app/.cxx/RelWithDebInfo/g303o542/x86/CMakeFiles/edit_cache.dir
-C:/Users/sakib/AndroidStudioProjects/AndroidApp/app/.cxx/RelWithDebInfo/g303o542/x86/CMakeFiles/rebuild_cache.dir
+C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/.cxx/RelWithDebInfo/g303o542/x86/CMakeFiles/LocalLLMApp.dir
+C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/.cxx/RelWithDebInfo/g303o542/x86/CMakeFiles/edit_cache.dir
+C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/.cxx/RelWithDebInfo/g303o542/x86/CMakeFiles/rebuild_cache.dir

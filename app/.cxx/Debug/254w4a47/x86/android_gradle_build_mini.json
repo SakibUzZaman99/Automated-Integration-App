@@ -17,12 +17,14 @@
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {
-    "AndroidApp::@6890427a1f51a3e7e1df": {
-      "artifactName": "AndroidApp",
+    "LocalLLMApp::@6890427a1f51a3e7e1df": {
+      "artifactName": "LocalLLMApp",
       "abi": "x86",
-      "output": "C:\\Users\\sakib\\AndroidStudioProjects\\LocalLLMApp\\app\\build\\intermediates\\cxx\\Debug\\254w4a47\\obj\\x86\\libAndroidApp.so",
+      "output": "C:\\Users\\sakib\\AndroidStudioProjects\\LocalLLMApp\\app\\build\\intermediates\\cxx\\Debug\\254w4a47\\obj\\x86\\libLocalLLMApp.so",
       "runtimeFiles": [
-        "C:\\Users\\sakib\\llama.cpp\\build-android\\bin\\libllama.so"
+        "C:\\Users\\sakib\\AndroidStudioProjects\\LocalLLMApp\\app\\src\\main\\jniLibs\\x86\\libomp.so",
+        "C:\\Users\\sakib\\AndroidStudioProjects\\LocalLLMApp\\app\\src\\main\\jniLibs\\x86\\libggml-cpu.so",
+        "C:\\Users\\sakib\\AndroidStudioProjects\\LocalLLMApp\\app\\src\\main\\jniLibs\\x86\\libllama.so"
       ]
     }
   }

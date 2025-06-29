@@ -1,5 +1,7 @@
 # ninja log v5
-1	826	7727514378237612	CMakeFiles/AndroidApp.dir/native-lib.cpp.o	d6b8d9b7735a533d
-834	974	7727514379728380	C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libAndroidApp.so	c53584b3c60b2d6e
-1	1305	7727677895417971	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	5307ce815f279d43
-1306	1452	7727677896894284	C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	764a5c5726587d65
+1	1225	7728566320737682	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	54675fb82f377941
+1232	1363	7728566322186432	C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	ad8ada698dedb589
+6	1157	7728567858700909	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	54675fb82f377941
+1158	1292	7728567860114284	C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	ad8ada698dedb589
+6	1045	7728568487506529	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	54675fb82f377941
+1046	1146	7728568488697368	C:/Users/sakib/AndroidStudioProjects/LocalLLMApp/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	ad8ada698dedb589
