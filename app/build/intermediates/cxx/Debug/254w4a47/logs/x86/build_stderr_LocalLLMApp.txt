@@ -1,0 +1,1 @@
+ninja: error: 'D:/GitDesk/Automated-Integration-App/app/src/main/jniLibs/x86/libomp.so', needed by 'D:/GitDesk/Automated-Integration-App/app/build/intermediates/cxx/Debug/254w4a47/obj/x86/libLocalLLMApp.so', missing and no known rule to make it

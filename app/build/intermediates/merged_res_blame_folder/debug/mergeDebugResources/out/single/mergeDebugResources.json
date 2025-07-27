@@ -1,0 +1,118 @@
+[
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/layout_activity_main.xml.flat",
+        "source": "com.example.localllmapp-main-74:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/xml_backup_rules.xml.flat",
+        "source": "com.example.localllmapp-main-74:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_ic_launcher_playstore.png.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/ic_launcher_playstore.png"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_ic_ai_logo.png.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/ic_ai_logo.png"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xxxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xxxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.localllmapp-main-74:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_ic_google_logo.png.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/ic_google_logo.png"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_login_background_gradient.xml.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/login_background_gradient.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_output_box_background.xml.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/output_box_background.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_black_white_gradient_bg.xml.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/black_white_gradient_bg.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/layout_activity_login.xml.flat",
+        "source": "com.example.localllmapp-main-74:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-mdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-mdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-hdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-hdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.localllmapp-main-74:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.example.localllmapp-debug-72:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.localllmapp-main-74:/mipmap-xhdpi/ic_launcher_round.webp"
+    }
+]

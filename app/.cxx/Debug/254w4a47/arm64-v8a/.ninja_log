@@ -1,0 +1,9 @@
+# ninja log v5
+0	9421	7729534325175496	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	c4a8f9b3537c3c3e
+9426	9548	7729534326507893	D:/GitDesk/Automated-Integration-App/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	effb3673948603a5
+6	6580	7729911755203303	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	c4a8f9b3537c3c3e
+6580	6846	7729911757912687	D:/GitDesk/Automated-Integration-App/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	effb3673948603a5
+4	928	7730640600612376	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	c4a8f9b3537c3c3e
+928	1186	7730640603204926	D:/GitDesk/Automated-Integration-App/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	effb3673948603a5
+10	1831	7730643025860090	CMakeFiles/LocalLLMApp.dir/native-lib.cpp.o	c4a8f9b3537c3c3e
+1832	2041	7730643028025665	D:/GitDesk/Automated-Integration-App/app/build/intermediates/cxx/Debug/254w4a47/obj/arm64-v8a/libLocalLLMApp.so	effb3673948603a5

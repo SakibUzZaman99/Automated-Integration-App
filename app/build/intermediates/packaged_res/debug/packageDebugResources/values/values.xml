@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="login_background">#2196F3</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_logo">App logo</string>
+    <string name="app_name">IntraAI</string>
+    <string name="default_web_client_id" translatable="false">232061410702-t2uo85dnquit4974tmb1f8r827kr96gu.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">232061410702</string>
+    <string name="google_api_key" translatable="false">AIzaSyCaBmflxmqfBkHqTODKIVFD6jufS6J4zxc</string>
+    <string name="google_app_id" translatable="false">1:232061410702:android:767b4db0526c26b3c618df</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCaBmflxmqfBkHqTODKIVFD6jufS6J4zxc</string>
+    <string name="google_storage_bucket" translatable="false">localllmapp.firebasestorage.app</string>
+    <string name="project_id" translatable="false">localllmapp</string>
+    <string name="welcome_message" translatable="false">Welcome to IntraAI!</string>
+    <style name="Theme.LocalLLMApp" parent="Theme.AppCompat.Light.NoActionBar"/>
+</resources>

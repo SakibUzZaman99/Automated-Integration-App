@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">232061410702-t2uo85dnquit4974tmb1f8r827kr96gu.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">232061410702</string>
+    <string name="google_api_key" translatable="false">AIzaSyCaBmflxmqfBkHqTODKIVFD6jufS6J4zxc</string>
+    <string name="google_app_id" translatable="false">1:232061410702:android:767b4db0526c26b3c618df</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCaBmflxmqfBkHqTODKIVFD6jufS6J4zxc</string>
+    <string name="google_storage_bucket" translatable="false">localllmapp.firebasestorage.app</string>
+    <string name="project_id" translatable="false">localllmapp</string>
+</resources>
