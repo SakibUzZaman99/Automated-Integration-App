@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    //id("com.android.application")
+    id("kotlin-parcelize")
     id("com.google.gms.google-services")
 }
 
@@ -18,11 +18,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        externalNativeBuild {
-            cmake {
-                cppFlags += ""
-            }
-        }
     }
 
     buildTypes {
@@ -44,19 +39,9 @@ android {
     buildFeatures {
         compose = true
     }
-    externalNativeBuild {
-        cmake {
-            path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1"
-        }
-    }
-    sourceSets["main"].jniLibs.srcDirs("src/main/jniLibs")
-
 }
 
 dependencies {
-
-//    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -73,6 +58,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Add this to your existing dependencies
+    implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.10")
+
     implementation(libs.material)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
@@ -82,6 +70,11 @@ dependencies {
     implementation(libs.androidx.core.ktx.v1160)
     implementation(libs.play.services.auth)
 
+    implementation("androidx.compose.material:material-icons-extended:1.3.0")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
+    // MediaPipe GenAI dependency (for when you're ready to implement)
+    implementation("com.google.mediapipe:tasks-genai:0.10.14")
 }
