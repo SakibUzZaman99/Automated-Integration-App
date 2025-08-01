@@ -76,5 +76,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     // MediaPipe GenAI dependency (for when you're ready to implement)
-    implementation("com.google.mediapipe:tasks-genai:0.10.14")
+    implementation("com.google.mediapipe:tasks-genai:0.10.25")
+    implementation("com.google.mediapipe:tasks-vision-image-generator:0.10.21")
 }

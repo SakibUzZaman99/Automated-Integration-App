@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -31,11 +32,32 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import com.example.localllmapp.helpers.LlmInferenceHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MultiModalActivity : ComponentActivity() {
+
+    private var inferenceJob: Job? = null
+    private var isModelInitialized by mutableStateOf(false)
+    private var initMessage by mutableStateOf("Welcome, I will be your Multimodal LLM")
+
+    init {
+        // Start model initialization as early as possible
+        lifecycleScope.launch(Dispatchers.IO) {
+            val success = LlmInferenceHelper.initMultiModalModel(applicationContext)
+            withContext(Dispatchers.Main) {
+                isModelInitialized = success
+                initMessage = if (success) {
+                    "Model ready! Send a message or image..."
+                } else {
+                    "Failed to initialize model. Please check model files."
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,28 +80,43 @@ class MultiModalActivity : ComponentActivity() {
                         imageBytes = imageBytes,
                         onSelectImage = { imagePickerLauncher.launch("image/*") },
                         onRemoveImage = { imageBytes = null },
-                        onSend = { prompt, img, onResult -> runImageAnalysis(prompt, img, onResult) },
-                        onBackClick = { finish() }
+                        onSend = { prompt, imgBytes, onResult ->
+                            runMultiModalInference(prompt, imgBytes, onResult)
+                        },
+                        onBackClick = { finish() },
+                        initMessage = initMessage
                     )
                 }
             }
         }
     }
 
-    private fun runImageAnalysis(prompt: String, image: ByteArray?, onResult: (String) -> Unit) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                if (image != null) {
-                    // TODO: Implement MediaPipe image analysis here
-                    val result = "MediaPipe image analysis pending. Prompt: $prompt"
+    private fun runMultiModalInference(
+        prompt: String,
+        image: ByteArray?,
+        onResult: (String) -> Unit
+    ) {
+        if (!isModelInitialized) {
+            onResult("Error: Model not initialized yet. Please wait...")
+            return
+        }
 
-                    withContext(Dispatchers.Main) {
-                        onResult(result)
-                    }
+        inferenceJob?.cancel()
+        inferenceJob = lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = if (image == null) {
+                    LlmInferenceHelper.generateResponse(prompt)
                 } else {
-                    withContext(Dispatchers.Main) {
-                        onResult("Please select an image to analyze.")
+                    val bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
+                    if (bitmap != null) {
+                        LlmInferenceHelper.generateMultiModalResponse(prompt, bitmap)
+                    } else {
+                        "Error: Could not decode image"
                     }
+                }
+
+                withContext(Dispatchers.Main) {
+                    onResult(response)
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
@@ -88,9 +125,13 @@ class MultiModalActivity : ComponentActivity() {
             }
         }
     }
-}
 
-// --- COMPOSABLES ---
+    override fun onDestroy() {
+        super.onDestroy()
+        inferenceJob?.cancel()
+        LlmInferenceHelper.cleanup()
+    }
+}
 
 data class MultiModalMessage(
     val text: String,
@@ -104,11 +145,26 @@ fun MultiModalChatScreen(
     onSelectImage: () -> Unit,
     onRemoveImage: () -> Unit,
     onSend: (String, ByteArray?, (String) -> Unit) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    initMessage: String
 ) {
     var input by remember { mutableStateOf(TextFieldValue("")) }
-    var messages by remember { mutableStateOf(listOf<MultiModalMessage>()) }
+    val messages = remember { mutableStateListOf<MultiModalMessage>() }
     var isLoading by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+
+    // Add initialization message
+    LaunchedEffect(initMessage) {
+        if (messages.isEmpty()) {
+            messages.add(MultiModalMessage(initMessage, null, false))
+        }
+    }
+
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty()) {
+            listState.animateScrollToItem(index = messages.size - 1)
+        }
+    }
 
     val backgroundGradient = Brush.verticalGradient(
         colors = listOf(Color(0xFF191919), Color(0xFF333639))
@@ -154,6 +210,7 @@ fun MultiModalChatScreen(
 
             // Chat messages
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -163,14 +220,9 @@ fun MultiModalChatScreen(
                 items(messages) { msg ->
                     MultiModalChatBubble(msg)
                 }
-                if (isLoading) {
-                    item {
-                        MultiModalChatBubble(MultiModalMessage("Thinking...", isUser = false))
-                    }
-                }
             }
 
-            // Preview selected image above input, if exists
+            // Preview selected image above input
             if (imageBytes != null) {
                 Box(
                     modifier = Modifier
@@ -236,19 +288,20 @@ fun MultiModalChatScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 val buttonEnabled = !isLoading && (input.text.isNotBlank() || imageBytes != null)
-                val buttonColor = if (buttonEnabled) MaterialTheme.colorScheme.primary else Color(0xFFB0B0B0)
+                val buttonColor = if (buttonEnabled) Color(0xFF8AB4F8) else Color(0xFFB0B0B0)
                 Button(
                     onClick = {
                         val prompt = input.text
                         val image = imageBytes
                         if (buttonEnabled) {
-                            messages = messages + MultiModalMessage(prompt, image, isUser = true)
+                            messages.add(MultiModalMessage(prompt, image, isUser = true))
                             input = TextFieldValue("")
                             if (image != null) onRemoveImage()
                             isLoading = true
+
                             onSend(prompt, image) { response ->
+                                messages.add(MultiModalMessage(response, null, false))
                                 isLoading = false
-                                messages = messages + MultiModalMessage(response, imageBytes = null, isUser = false)
                             }
                         }
                     },

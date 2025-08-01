@@ -34,10 +34,17 @@ class LoginActivity : ComponentActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private val RC_SIGN_IN = 1001
 
-    private var isLoading by mutableStateOf(false) // ✅ Added loading state
+    private var isLoading by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // BYPASS LOGIN - Go directly to ModelSelectionActivity
+        startActivity(Intent(this, ModelSelectionActivity::class.java))
+        finish()
+        return
+
+        /* COMMENTED OUT FOR BYPASS - Uncomment when you want to enable login
 
         firebaseAuth = FirebaseAuth.getInstance()
         if (firebaseAuth.currentUser != null) {
@@ -57,15 +64,19 @@ class LoginActivity : ComponentActivity() {
             CompanionAILoginScreen(
                 isLoading = isLoading,
                 onGoogleSignInClick = {
-                    isLoading = true // ✅ Show spinner
+                    isLoading = true
                     startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
                 }
             )
         }
+
+        */
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        /* COMMENTED OUT FOR BYPASS
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -73,7 +84,7 @@ class LoginActivity : ComponentActivity() {
                 val account = task.getResult(ApiException::class.java)!!
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
-                    isLoading = false // ✅ Hide spinner
+                    isLoading = false
                     if (task.isSuccessful) {
                         startActivity(Intent(this, ModelSelectionActivity::class.java))
                         finish()
@@ -82,13 +93,16 @@ class LoginActivity : ComponentActivity() {
                     }
                 }
             } catch (e: ApiException) {
-                isLoading = false // ✅ Hide spinner
+                isLoading = false
                 Toast.makeText(this, "Google Sign In Failed", Toast.LENGTH_SHORT).show()
             }
         }
+
+        */
     }
 }
 
+// Keep the Composable functions as they are (they won't be used but won't cause errors)
 
 @Composable
 fun CompanionAILoginScreen(isLoading: Boolean, onGoogleSignInClick: () -> Unit) {
