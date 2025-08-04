@@ -4,10 +4,17 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
+<<<<<<< Updated upstream
         <DropdownSelection timestamp="2025-07-28T15:40:54.196456100Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=4fce413e" />
+=======
+        <DropdownSelection timestamp="2025-08-01T13:08:54.928426800Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=R58M4201DXW" />
+>>>>>>> Stashed changes
             </handle>
           </Target>
         </DropdownSelection>

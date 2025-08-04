@@ -30,26 +30,45 @@ import androidx.compose.ui.platform.LocalContext
 import java.io.File
 import org.json.JSONObject
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import java.util.Date
+import android.content.ComponentName
+import android.provider.Settings
+import android.text.TextUtils
+import kotlinx.coroutines.MainScope
 
 class WorkflowSetupActivity : ComponentActivity() {
+
+    private val auth = FirebaseAuth.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
+   // private val scope = rememberCoroutineScope()
+   private val scope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val scope = rememberCoroutineScope()
+
             MaterialTheme {
                 Surface {
                     WorkflowSetupScreen(
                         onSaveClick = { source, sourceAccount, destination, destinationAccount, instructions ->
-                            saveWorkflowToJson(source, sourceAccount, destination, destinationAccount, instructions)
+                            scope.launch {
+                                saveWorkflow(source, sourceAccount, destination, destinationAccount, instructions)
+                            }
                         },
-                        onBackClick = { finish() }
+                        onBackClick = { finish() },
+                        isNotificationServiceEnabled = { isNotificationServiceEnabled() },
+                        onRequestNotificationAccess = { requestNotificationAccess() }
                     )
                 }
             }
         }
     }
 
-    private fun saveWorkflowToJson(
+    private suspend fun saveWorkflow(
         source: String,
         sourceAccount: String,
         destination: String,
@@ -57,6 +76,7 @@ class WorkflowSetupActivity : ComponentActivity() {
         instructions: String
     ) {
         try {
+            // Save to local JSON file (for backward compatibility)
             val workflow = JSONObject().apply {
                 put("source", source)
                 put("sourceAccount", sourceAccount)
@@ -64,11 +84,15 @@ class WorkflowSetupActivity : ComponentActivity() {
                 put("destinationAccount", destinationAccount)
                 put("instructions", instructions)
                 put("timestamp", System.currentTimeMillis())
+                put("active", true)
             }
 
             val fileName = "workflow_${System.currentTimeMillis()}.json"
             val file = File(filesDir, fileName)
             file.writeText(workflow.toString())
+
+            // Also save to Firestore for cloud sync
+            saveWorkflowToFirestore(workflow)
 
             Toast.makeText(this, "Workflow saved successfully!", Toast.LENGTH_SHORT).show()
             finish()
@@ -76,12 +100,61 @@ class WorkflowSetupActivity : ComponentActivity() {
             Toast.makeText(this, "Error saving workflow: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun saveWorkflowToFirestore(workflow: JSONObject) {
+        val userId = auth.currentUser?.uid ?: return
+
+        val workflowData = hashMapOf(
+            "userId" to userId,
+            "source" to workflow.getString("source"),
+            "sourceAccount" to workflow.getString("sourceAccount"),
+            "destination" to workflow.getString("destination"),
+            "destinationAccount" to workflow.getString("destinationAccount"),
+            "instructions" to workflow.getString("instructions"),
+            "active" to workflow.getBoolean("active"),
+            "createdAt" to Date(),
+            "lastModified" to Date()
+        )
+
+        firestore.collection("workflows")
+            .add(workflowData)
+            .addOnSuccessListener {
+                android.util.Log.d("WorkflowSetup", "Workflow saved to Firestore")
+            }
+            .addOnFailureListener { e ->
+                android.util.Log.e("WorkflowSetup", "Error saving to Firestore", e)
+            }
+    }
+
+    private fun isNotificationServiceEnabled(): Boolean {
+        val packageName = packageName
+        val flat = Settings.Secure.getString(
+            contentResolver,
+            "enabled_notification_listeners"
+        )
+        if (!TextUtils.isEmpty(flat)) {
+            val names = flat.split(":").toTypedArray()
+            for (name in names) {
+                val componentName = ComponentName.unflattenFromString(name)
+                if (componentName != null && TextUtils.equals(packageName, componentName.packageName)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun requestNotificationAccess() {
+        startActivity(android.content.Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+    }
 }
 
 @Composable
 fun WorkflowSetupScreen(
     onSaveClick: (String, String, String, String, String) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    isNotificationServiceEnabled: () -> Boolean,
+    onRequestNotificationAccess: () -> Unit
 ) {
     var selectedSource by remember { mutableStateOf("") }
     var sourceAccount by remember { mutableStateOf(TextFieldValue("")) }
@@ -91,9 +164,17 @@ fun WorkflowSetupScreen(
     var showSourceDropdown by remember { mutableStateOf(false) }
     var showDestinationDropdown by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
+    var showNotificationPermissionDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    // Validation functions
+    // Check notification permission on launch
+    LaunchedEffect(Unit) {
+        if (!isNotificationServiceEnabled()) {
+            showNotificationPermissionDialog = true
+        }
+    }
+
+    // Validation functions (same as before)
     fun isValidEmail(email: String): Boolean {
         return email.isNotEmpty() &&
                 email.contains("@gmail.com") &&
@@ -102,10 +183,11 @@ fun WorkflowSetupScreen(
 
     fun isValidPhoneNumber(phone: String): Boolean {
         return phone.isNotEmpty() &&
-                phone.matches(Regex("^[+]?[1-9]\\d{6,14}$")) // Minimum 7 digits total
+                phone.matches(Regex("^[+]?[1-9]\\d{6,14}$"))
     }
 
     fun validateInput(): String? {
+        if (!isNotificationServiceEnabled()) return "Please enable notification access first"
         if (selectedSource.isEmpty()) return "Please select a source app"
         if (selectedDestination.isEmpty()) return "Please select a destination app"
         if (instructions.text.isEmpty()) return "Please enter instructions"
@@ -131,7 +213,7 @@ fun WorkflowSetupScreen(
             return "Please enter a valid phone number"
         }
 
-        return null // All validation passed
+        return null
     }
 
     val backgroundGradient = Brush.verticalGradient(
@@ -177,7 +259,50 @@ fun WorkflowSetupScreen(
                 )
             }
 
-            // Scrollable content
+            // Notification Service Status Card
+            if (!isNotificationServiceEnabled()) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFF4444).copy(alpha = 0.2f)
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                "Notification Access Required",
+                                color = Color(0xFFFF4444),
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                "Enable to detect Gmail/Telegram notifications",
+                                color = Color.White.copy(alpha = 0.7f),
+                                fontSize = 12.sp
+                            )
+                        }
+                        Button(
+                            onClick = onRequestNotificationAccess,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFFF4444)
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text("Enable", fontSize = 12.sp)
+                        }
+                    }
+                }
+            }
+
+            // Scrollable content (rest of the UI remains the same)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -185,6 +310,7 @@ fun WorkflowSetupScreen(
                     .padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
+
                 // Select Source Section
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -528,6 +654,44 @@ fun WorkflowSetupScreen(
                         onClick = { showConfirmationDialog = false }
                     ) {
                         Text("CANCEL", color = Color(0xFFEA3838), fontWeight = FontWeight.Bold)
+                    }
+                }
+            )
+        }
+
+        // Notification Permission Dialog
+        if (showNotificationPermissionDialog) {
+            AlertDialog(
+                onDismissRequest = { showNotificationPermissionDialog = false },
+                containerColor = Color(0xFF23272A),
+                title = {
+                    Text(
+                        "Enable Notification Access",
+                        color = Color(0xFF8AB4F8),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                text = {
+                    Text(
+                        "To monitor Gmail and Telegram notifications, this app needs notification access permission. This allows the app to detect when notifications arrive and trigger your workflows automatically.",
+                        color = Color.White
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showNotificationPermissionDialog = false
+                            onRequestNotificationAccess()
+                        }
+                    ) {
+                        Text("OPEN SETTINGS", color = Color(0xFF3EECAC), fontWeight = FontWeight.Bold)
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { showNotificationPermissionDialog = false }
+                    ) {
+                        Text("LATER", color = Color(0xFFEA3838), fontWeight = FontWeight.Bold)
                     }
                 }
             )

@@ -52,7 +52,7 @@ class ModelSelectionActivity : ComponentActivity() {
                             startActivity(Intent(this, WorkflowSetupActivity::class.java))
                         },
                         onNotificationDemoClick = {
-                            startActivity(Intent(this, NotificationDisplayActivity::class.java))
+                            //startActivity(Intent(this, NotificationDisplayActivity::class.java))
                         },
                         onLogoutClick = { showLogoutDialog = true }
                     )

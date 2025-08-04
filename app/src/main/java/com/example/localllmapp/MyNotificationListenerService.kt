@@ -6,6 +6,11 @@ import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import com.example.localllmapp.workflow.WorkflowExecutor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class MyNotificationListenerService : NotificationListenerService() {
 
@@ -13,10 +18,16 @@ class MyNotificationListenerService : NotificationListenerService() {
         private const val TAG = "NotificationListener"
         private const val GMAIL_PACKAGE = "com.google.android.gm"
         private const val TELEGRAM_PACKAGE = "org.telegram.messenger"
-
-        // Broadcast action for sending notification data
         const val NOTIFICATION_RECEIVED_ACTION = "com.example.localllmapp.NOTIFICATION_RECEIVED"
+    }
 
+    private lateinit var workflowExecutor: WorkflowExecutor
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    override fun onCreate() {
+        super.onCreate()
+        Log.d(TAG, "NotificationListenerService created")
+        workflowExecutor = WorkflowExecutor(this)
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -27,13 +38,58 @@ class MyNotificationListenerService : NotificationListenerService() {
 
             // Check if it's from Gmail or Telegram
             if (packageName == GMAIL_PACKAGE || packageName == TELEGRAM_PACKAGE) {
+                Log.d(TAG, "Relevant notification detected from: $packageName")
+
+                // Extract basic info for workflow matching
+                val extras = notification.notification.extras
+                val appName = when (packageName) {
+                    GMAIL_PACKAGE -> "Gmail"
+                    TELEGRAM_PACKAGE -> "Telegram"
+                    else -> return
+                }
+
+                val sender = extractSenderInfo(notification, extras)
+                val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
+
+                // Process in background
+                serviceScope.launch {
+                    try {
+                        Log.d(TAG, "Processing workflow for $appName notification")
+                        workflowExecutor.processNotification(
+                            appName = appName,
+                            notificationSender = sender,
+                            notificationTitle = title
+                        )
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error processing workflow", e)
+                    }
+                }
+
+                // Still send broadcast for UI updates if needed
                 val notificationData = extractNotificationData(notification)
                 notificationData?.let { data ->
-                    // Send the data via broadcast or callback
                     sendNotificationData(data)
-                    Log.d(TAG, "Notification from ${data.appName}: ${data.title}")
                 }
             }
+        }
+    }
+
+    private fun extractSenderInfo(sbn: StatusBarNotification, extras: Bundle): String {
+        return when (sbn.packageName) {
+            GMAIL_PACKAGE -> {
+                val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
+                val subText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString() ?: ""
+
+                if (title.contains("@") || title.contains("<")) {
+                    title
+                } else {
+                    subText.ifEmpty { title }
+                }
+            }
+            TELEGRAM_PACKAGE -> {
+                extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
+            }
+            else -> ""
         }
     }
 
@@ -53,18 +109,10 @@ class MyNotificationListenerService : NotificationListenerService() {
             val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: text
             val subText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString() ?: ""
             val summaryText = extras.getCharSequence(Notification.EXTRA_SUMMARY_TEXT)?.toString() ?: ""
-
-            // Extract sender information
             val sender = extractSenderInfo(sbn, extras)
-
-            // Get timestamp
             val timestamp = sbn.postTime
-
-            // Get notification ID and tag
             val notificationId = sbn.id
             val notificationTag = sbn.tag ?: ""
-
-            // Extract additional metadata
             val category = notification.category ?: ""
             val group = notification.group ?: ""
             val isGroupSummary = (notification.flags and Notification.FLAG_GROUP_SUMMARY) != 0
@@ -84,7 +132,7 @@ class MyNotificationListenerService : NotificationListenerService() {
                 category = category,
                 group = group,
                 isGroupSummary = isGroupSummary,
-                extras = extractAllExtras(extras)
+                extras = emptyMap() // Simplified for performance
             )
 
         } catch (e: Exception) {
@@ -93,64 +141,23 @@ class MyNotificationListenerService : NotificationListenerService() {
         }
     }
 
-    private fun extractSenderInfo(sbn: StatusBarNotification, extras: Bundle): String {
-        return when (sbn.packageName) {
-            GMAIL_PACKAGE -> {
-                // For Gmail, sender is usually in title or sub text
-                val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
-                val subText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString() ?: ""
-
-                // Gmail often puts sender in title, subject in big text
-                if (title.contains("@") || title.contains("<")) {
-                    title
-                } else {
-                    subText.ifEmpty { title }
-                }
-            }
-            TELEGRAM_PACKAGE -> {
-                // For Telegram, sender is usually in the title
-                extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
-            }
-            else -> ""
-        }
-    }
-
-    private fun extractAllExtras(extras: Bundle): Map<String, String> {
-        val extrasMap = mutableMapOf<String, String>()
-
-        for (key in extras.keySet()) {
-            try {
-                val value = extras.get(key)
-                extrasMap[key] = value?.toString() ?: "null"
-            } catch (e: Exception) {
-                extrasMap[key] = "Error: ${e.message}"
-            }
-        }
-
-        return extrasMap
-    }
-
     private fun sendNotificationData(data: NotificationData) {
-        // Method 1: Explicit Broadcast Intent
         val intent = Intent(this, NotificationReceiver::class.java).apply {
             action = NOTIFICATION_RECEIVED_ACTION
             putExtra("notification_data", data)
         }
         sendBroadcast(intent)
-
-        // Method 2: You can also store in database, send to server, etc.
-        // Example: Store in Room database
-        // notificationRepository.insertNotification(data)
-
-        // Method 3: Send to your main activity if it's running
-        // NotificationDataManager.getInstance().addNotification(data)
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification?) {
         super.onNotificationRemoved(sbn)
-        // Handle notification removal if needed
         sbn?.let {
             Log.d(TAG, "Notification removed from ${it.packageName}")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        workflowExecutor.cleanup()
     }
 }

@@ -2,9 +2,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Required permission for notification listener -->
+    <!-- Network permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Google Account permissions for Gmail API -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+    <!-- Notification listener permission -->
     <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
         tools:ignore="ProtectedPermissions" />
+
+    <!-- Optional: For background processing -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Optional: For storing logs/data -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +33,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocalLLMApp"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
         <!-- LoginActivity as launcher -->
@@ -29,18 +48,40 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ModelSelectionActivity" />
-        <activity android:name=".InstructionModelActivity" />
-        <activity android:name=".MultiModalActivity" />
-        <activity android:name=".WorkflowSetupActivity" />
-        <activity android:name=".NotificationDisplayActivity" />
+        <!-- Model Selection Activity -->
+        <activity
+            android:name=".ModelSelectionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LocalLLMApp" />
 
+        <!-- Instruction Model Activity -->
+        <activity
+            android:name=".InstructionModelActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LocalLLMApp" />
+
+        <!-- Multi Modal Activity -->
+        <activity
+            android:name=".MultiModalActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LocalLLMApp" />
+
+        <!-- Workflow Setup Activity -->
+        <activity
+            android:name=".WorkflowSetupActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LocalLLMApp" />
+
+
+<<<<<<< Updated upstream
 <!--        &lt;!&ndash; Main screen with LLM after login &ndash;&gt;-->
 <!--        <activity-->
 <!--            android:name=".MainActivity"-->
 <!--            android:exported="true"-->
 <!--            android:label="@string/app_name"-->
 <!--            android:theme="@style/Theme.LocalLLMApp" />-->
+=======
+>>>>>>> Stashed changes
 
         <!-- Notification listener service -->
         <service
@@ -51,6 +92,9 @@
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
+            <meta-data
+                android:name="android.service.notification.listener.component"
+                android:value="com.example.localllmapp/com.example.localllmapp.MyNotificationListenerService" />
         </service>
 
         <!-- Broadcast receiver for processed notification data -->
@@ -62,6 +106,22 @@
                 <action android:name="com.example.localllmapp.NOTIFICATION_RECEIVED" />
             </intent-filter>
         </receiver>
+
+
+
+        <!-- Firebase services (these are typically added automatically by Firebase) -->
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- Google Play Services metadata -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
     </application>
 
