@@ -23,9 +23,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.api.services.gmail.GmailScopes
 import com.example.localllmapp.R
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class LoginActivity : ComponentActivity() {
@@ -40,15 +44,30 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()
+
+        // Check if user is already signed in
         if (firebaseAuth.currentUser != null) {
-            startActivity(Intent(this, ModelSelectionActivity::class.java))
-            finish()
-            return
+            // Check if they have Gmail permissions
+            val account = GoogleSignIn.getLastSignedInAccount(this)
+            if (account != null && hasGmailPermissions(account)) {
+                // User has everything, go to main screen
+                startActivity(Intent(this, ModelSelectionActivity::class.java))
+                finish()
+                return
+            }
+            // User is signed in but missing Gmail permissions
+            // Continue to show login screen to request permissions
         }
 
+        // Configure sign-in to request Gmail permissions from the start
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
+            .requestScopes(
+                Scope(GmailScopes.GMAIL_READONLY),
+                Scope(GmailScopes.GMAIL_SEND),
+                Scope(GmailScopes.GMAIL_MODIFY)
+            )
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -57,11 +76,38 @@ class LoginActivity : ComponentActivity() {
             CompanionAILoginScreen(
                 isLoading = isLoading,
                 onGoogleSignInClick = {
+<<<<<<< Updated upstream
                     isLoading = true // ✅ Show spinner
                     startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
                 }
             )
         }
+=======
+                    isLoading = true
+                    signIn()
+                }
+            )
+        }
+    }
+
+    private fun hasGmailPermissions(account: GoogleSignInAccount): Boolean {
+        val requiredScopes = listOf(
+            GmailScopes.GMAIL_READONLY,
+            GmailScopes.GMAIL_SEND,
+            GmailScopes.GMAIL_MODIFY
+        )
+        return requiredScopes.all { scope ->
+            account.grantedScopes.any { it.scopeUri == scope }
+        }
+    }
+
+    private fun signIn() {
+        // Sign out first to ensure fresh permission request
+        googleSignInClient.signOut().addOnCompleteListener {
+            // Now sign in with Gmail permissions
+            startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
+        }
+>>>>>>> Stashed changes
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -71,6 +117,18 @@ class LoginActivity : ComponentActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
+
+                // Check if Gmail permissions were granted
+                if (!hasGmailPermissions(account)) {
+                    isLoading = false
+                    Toast.makeText(
+                        this,
+                        "Gmail permissions are required for workflow automation",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return
+                }
+
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
                     isLoading = false // ✅ Hide spinner
@@ -89,7 +147,10 @@ class LoginActivity : ComponentActivity() {
     }
 }
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 @Composable
 fun CompanionAILoginScreen(isLoading: Boolean, onGoogleSignInClick: () -> Unit) {
     val gradient = Brush.verticalGradient(

@@ -271,4 +271,8 @@ class GmailApiHandler(private val context: Context) {
 
         return Message().apply { raw = encodedEmail }
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

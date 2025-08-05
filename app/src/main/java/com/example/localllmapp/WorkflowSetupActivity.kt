@@ -43,8 +43,13 @@ class WorkflowSetupActivity : ComponentActivity() {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
+<<<<<<< Updated upstream
    // private val scope = rememberCoroutineScope()
    private val scope = MainScope()
+=======
+    // private val scope = rememberCoroutineScope()
+    private val scope = MainScope()
+>>>>>>> Stashed changes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

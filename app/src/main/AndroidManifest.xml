@@ -34,13 +34,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LocalLLMApp"
         android:usesCleartextTraffic="true"
+<<<<<<< Updated upstream
         tools:targetApi="31">
+=======
+        >
+>>>>>>> Stashed changes
 
         <!-- LoginActivity as launcher -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -72,6 +75,7 @@
             android:exported="false"
             android:theme="@style/Theme.LocalLLMApp" />
 
+<<<<<<< Updated upstream
 
 <<<<<<< Updated upstream
 <!--        &lt;!&ndash; Main screen with LLM after login &ndash;&gt;-->
@@ -81,6 +85,19 @@
 <!--            android:label="@string/app_name"-->
 <!--            android:theme="@style/Theme.LocalLLMApp" />-->
 =======
+>>>>>>> Stashed changes
+=======
+<!--        &lt;!&ndash; Telegram Setup Activity &ndash;&gt;-->
+<!--        <activity-->
+<!--            android:name=".TelegramSetupActivity"-->
+<!--            android:exported="false"-->
+<!--            android:theme="@style/Theme.LocalLLMApp" />-->
+
+        <!-- Notification Display Activity -->
+        <activity
+            android:name=".NotificationDisplayActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LocalLLMApp" />
 >>>>>>> Stashed changes
 
         <!-- Notification listener service -->
@@ -107,6 +124,7 @@
             </intent-filter>
         </receiver>
 
+<<<<<<< Updated upstream
 
 
         <!-- Firebase services (these are typically added automatically by Firebase) -->
@@ -118,6 +136,8 @@
             </intent-filter>
         </service>
 
+=======
+>>>>>>> Stashed changes
         <!-- Google Play Services metadata -->
         <meta-data
             android:name="com.google.android.gms.version"
